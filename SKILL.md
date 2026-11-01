@@ -100,6 +100,7 @@ allowed-tools: Read, Glob, Grep, Bash(uv *), Bash(python *), Bash(pandoc *)
 - `references/LOGIC_COHERENCE.md`: logic, coherence, heading lead-ins, consistency, and literature-review expectations.
 - `references/TITLE_OPTIMIZATION.md`: Chinese academic title heuristics.
 - `references/DEAI_GUIDE.md`: de-AI review heuristics.
+- `references/TECH_DOC_STYLE_ZH.md`: 中文科技文档写作与排版规范（提炼自 tech-doc-style-chinese skill，2026-10-29 版：中西文留白、数字单位、直角引号、黑话替换、受控技术写作、API 状态文案）。
 - `references/modules/EXPERIMENT.md`: experiment-chapter review criteria.
 - `references/UNIVERSITIES/`: school-specific constraints (e.g., `yanshan.md`).
 

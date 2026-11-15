@@ -2,6 +2,8 @@
 
 Purpose: Detect and reduce AI-generated writing traces in Chinese doctoral theses.
 
+> 🔴 **改写边界优先**：本文件只列「检测什么」。任何改写动作必须先读 `SKILL.md §Chinese Writing Boundaries`（禁改清单 / 证据纪律 / 反模式黑名单 / Quick Checks）与 `../DEAI_GUIDE.md §写作保护边界`。**脚本命中 ≠ 改写判据**；`deai_check.py` 只产出线索，不得据命中或密度分数批量替换。
+
 ## Core Principles
 
 1. **Syntax preservation**: Never modify `[@key]` citations, `$...$` math, or Markdown structure
@@ -51,6 +53,8 @@ uv run python deai_check.py thesis.md --fix-suggestions
 ```
 
 ## AI Density Scoring
+
+> 阈值真源：`deai_check.py` 的退出码为 **5% / 10%**（`exit 1` / `exit 2`），与下表人工分级不是同一口径。任何分数**不得直接触发改写**，一律按 `SKILL.md §Chinese Writing Boundaries` 复核；冲突时在报告写明「脚本↔边界冲突」。
 
 | Score | Action |
 |-------|--------|

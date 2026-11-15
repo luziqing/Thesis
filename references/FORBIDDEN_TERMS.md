@@ -1,5 +1,7 @@
 # Protected Terms - DO NOT Modify
 
+> **适用范围**：本 skill 面向 Markdown + Pandoc 论文，保护对象是 `[@key]`、`$...$` / `$$...$$`、`[^n]`、代码块、图表与交叉引用。下方 `LaTeX Environments` / `Citation Commands` 等章节是 `.tex` 项目遗留口径，**仅在确为 LaTeX 项目时适用**；Markdown 项目以 `SKILL.md §Chinese Writing Boundaries` 为准。
+
 These terms should NEVER be modified without explicit permission.
 
 ## Technical Terms (Keep as-is)

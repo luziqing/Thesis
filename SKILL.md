@@ -1,9 +1,9 @@
 ---
 name: thesis-zh
-description: Chinese Markdown thesis assistant for multi-file .md degree thesis projects (Pandoc). Use this skill whenever a user works on a Chinese doctoral thesis in Markdown format needing structure mapping, GB/T 7714 bibliography checks, terminology consistency, logic coherence review, heading lead-in checks, title optimization, de-AI editing, experiment chapter review, or Pandoc export. Trigger even for single issues like "检查论文结构", "检查国标格式", "看看绪论逻辑", "毕业论文", "学位论文", "博士论文", or "检查 Markdown 论文".
+description: Chinese Markdown thesis assistant for multi-file .md degree thesis projects (Pandoc). Use this skill whenever a user works on a Chinese doctoral thesis in Markdown format needing topic/开题 evaluation, literature survey and review synthesis, structure mapping, GB/T 7714 bibliography checks, citation authenticity verification, terminology consistency, logic coherence review, heading lead-in checks, title optimization, faithful-language polishing (tone calibration, Chinese-to-English abstract), de-AI editing, experiment chapter review, pre-submission review with severity gating, or Pandoc export. Trigger even for single issues like "评估选题", "帮我做文献调研", "检查论文结构", "检查国标格式", "看看绪论逻辑", "润色这一段", "送审前审一遍", "毕业论文", "学位论文", "博士论文", or "检查 Markdown 论文".
 metadata:
   category: academic-writing
-  tags: [markdown, thesis, chinese, phd, pandoc, gb7714, structure, bibliography, deai, logic]
+  tags: [markdown, thesis, chinese, phd, pandoc, gb7714, topic, survey, citation, structure, bibliography, deai, polish, logic, review]
 argument-hint: "[thesis.md 或 thesis_dir/] [--section SECTION] [--module MODULE]"
 allowed-tools: Read, Glob, Grep, Bash(uv *), Bash(python *), Bash(pandoc *)
 ---
@@ -14,9 +14,11 @@ allowed-tools: Read, Glob, Grep, Bash(uv *), Bash(python *), Bash(pandoc *)
 
 ## Triggering
 
-当用户拥有一个现有中文 `.md` 学位论文项目，并希望你处理以下任务时使用本 skill：Pandoc 导出或工具链排查；学位论文格式、国标、学校规范检查；章节结构梳理；术语与缩略语一致性；逻辑连贯性、文献综述质量、标题后导语、跨章节闭合；标题优化、学术表达、去 AI 化；实验章节语言与结构审阅。
+当用户拥有一个现有中文 `.md` 学位论文项目，并希望你处理以下任务时使用本 skill：选题论证与开题评估；文献调研与综述章研究现状梳理；Pandoc 导出或工具链排查；学位论文格式、国标、学校规范检查；术语与缩略语一致性；引用真实性核验；逻辑连贯性、文献综述质量、标题后导语、跨章节闭合；标题优化、忠于原意的润色、语气校准、学术表达、去 AI 化；实验章节语言与结构审阅；送审/答辩前统一核查。
 
-即使用户只提到单一问题，例如"检查绪论逻辑""按 GB/T 7714 看参考文献"或"帮我把论文导出为 PDF"，也应触发本 skill。
+即使用户只提到单一问题，例如"评估这个选题""帮我做文献调研""检查绪论逻辑""按 GB/T 7714 看参考文献""润色这一段""送审前审一遍"或"帮我把论文导出为 PDF"，也应触发本 skill。
+
+`topic` / `survey` 属论文开工前后的调研阶段，虽不要求先有稿件，但仍服务于学位论文工程，故纳入本 skill；对英文会议/期刊论文的同类需求仍转对应 skill。
 
 ## Do Not Use
 
@@ -26,15 +28,17 @@ allowed-tools: Read, Glob, Grep, Bash(uv *), Bash(python *), Bash(pandoc *)
 - LaTeX `.tex` 项目（使用 `latex-thesis-zh`）
 - Typst 项目
 - 仅有 DOCX/PDF、没有 Markdown 源文件的场景
-- 纯文献调研、没有学位论文工程的任务
-- 从零写一篇学位论文
-- 多维度审稿、评分或投稿门控检查（使用 `paper-audit`）
+- 与学位论文无关的纯文献调研（本 skill 的 `survey` 服务于论文综述章；通用调研不属于此）
+- 从零写一篇学位论文（`topic` 只做选题评估，`survey` 只做调研综合，均不起草正文）
+- 英文期刊投稿门控检查（使用 `paper-audit`；本 skill 的 `review` 只面向中文学位论文送审/答辩）
 - 规避 AI 使用检测或规避查重（见 Chinese Writing Boundaries 反模式黑名单）
 
 ## Module Router
 
 | Module | Use when | Primary command | Read next |
 | --- | --- | --- | --- |
+| `topic` | 选题论证、开题评估、在多个候选选题间做取舍 | LLM 判断（无脚本），流程见参考 | `references/modules/TOPIC.md` |
+| `survey` | 文献调研、写/重构综述章前的研究现状梳理 | LLM 判断 + 检索/子代理，流程见参考 | `references/modules/SURVEY.md` |
 | `export` | Need to export Markdown thesis to PDF/DOCX via Pandoc | `uv run python $SKILL_DIR/scripts/export.py thesis_dir/` | `references/modules/EXPORT.md` |
 | `format` | User asks about typos, punctuation, or formatting | `uv run python $SKILL_DIR/scripts/check_format.py thesis.md --strict` | `references/modules/FORMAT.md` |
 | `structure` | Need chapter/section map or thesis skeleton overview | `uv run python $SKILL_DIR/scripts/map_structure.py thesis_dir/` | `references/STRUCTURE_GUIDE.md` |
@@ -42,16 +46,19 @@ allowed-tools: Read, Glob, Grep, Bash(uv *), Bash(python *), Bash(pandoc *)
 | `bibliography` | GB/T 7714 or BibTeX validation | `uv run python $SKILL_DIR/scripts/verify_bib.py references.bib --standard gb7714` | `references/modules/BIBLIOGRAPHY.md` |
 | `title` | Optimize Chinese thesis titles and chapter titles | `uv run python $SKILL_DIR/scripts/optimize_title.py thesis.md --check` | `references/modules/TITLE.md` |
 | `deai` | Reduce AI-writing traces in visible Chinese prose | `uv run python $SKILL_DIR/scripts/deai_check.py thesis.md --analyze` | `references/modules/DEAI.md` |
+| `polish` | 忠于原意的语言润色、语气校准、按节惯例、英文摘要中译英 | LLM 改写（受 Chinese Writing Boundaries 约束），流程见参考 | `references/modules/POLISH.md` |
 | `logic` | Check logical coherence, introduction funnel, heading lead-ins, lit review quality, chapter mainline, and cross-section closure | `uv run python $SKILL_DIR/scripts/analyze_logic.py thesis.md --section related` | `references/modules/LOGIC.md` |
 | `experiment` | Review experiment chapter language, discussion layering, and conclusion completeness | `uv run python $SKILL_DIR/scripts/analyze_experiment.py thesis.md --section experiments` | `references/modules/EXPERIMENT.md` |
+| `review` | 送审/答辩前统一核查、严重度分级与送审裁决 | 编排已有脚本 + LLM 判断，流程见参考 | `references/modules/REVIEW.md` |
 
 ## Required Inputs
 
-- 论文入口文件（如 `thesis.md`）或论文目录（如 `thesis_dir/`，包含多个 `.md` 文件）。
+- 论文入口文件（如 `thesis.md`）或论文目录（如 `thesis_dir/`，包含多个 `.md` 文件）——`export`/`format`/`structure`/`consistency`/`bibliography`/`title`/`deai`/`logic`/`experiment`/`polish`/`review` 需要。
+- `topic`/`survey` 不需要稿件：需要选题描述 / 课题或 RQ，可附能力自述、候选选题、检索能力说明。
 - 可选 `--section SECTION`，当用户只关注某一章或某一节。
 - 可选 bibliography 路径（`.bib` 文件）与学校上下文（如燕山大学）。
 
-如果参数不完整，只追问入口 `.md` 文件（或目录）和目标模块，不额外扩展问题。
+如果参数不完整，只追问入口 `.md` 文件（或目录，或选题/课题描述）和目标模块，不额外扩展问题。
 
 ## Output Contract
 
@@ -65,10 +72,11 @@ allowed-tools: Read, Glob, Grep, Bash(uv *), Bash(python *), Bash(pandoc *)
 
 1. Parse `$ARGUMENTS` for entry file/directory and module. If missing, ask for the thesis `.md` entry file (or directory) and target module.
 2. Read the one file in the "Read next" column for that module. For any rewrite task, also apply the **Chinese Writing Boundaries** section below.
-3. Run the command exactly as given in the Module Router. If `uv` is unavailable, substitute `python` and report the substitution; never mix the two forms within one run.
-4. Return findings as `<!-- Module (L##) [Severity] [Priority]: ... -->`. Report exact command and exit code on failure.
+3. **Script-driven modules** (`export`/`format`/`structure`/`consistency`/`bibliography`/`title`/`deai`/`logic`/`experiment`): run the command exactly as given in the Module Router. If `uv` is unavailable, substitute `python` and report the substitution; never mix the two forms within one run. **Judgment-driven modules** (`topic`/`survey`/`polish`/`review`): no script; follow the referenced guide's procedure and capability preconditions (e.g. `survey` requires retrieval; `review` orchestrates existing scripts + LLM judgment). Do not fabricate a command or a script result for these.
+4. Return findings as `<!-- Module (L##) [Severity] [Priority]: ... -->`. Report exact command and exit code on failure. For judgment-driven modules, still tag findings with severity and cite the specific evidence/rule.
 5. For multi-file thesis, the scripts will automatically scan the directory for all `.md` files.
-6. Before delivering rewritten prose, run the Quick Checks in Chinese Writing Boundaries. Any failure returns to the audit step.
+6. Before delivering rewritten prose, run the Quick Checks in Chinese Writing Boundaries. Any failure returns to the audit step. `polish` rewrites are additionally bound by that section as the single source of truth.
+7. Citation authenticity: whenever `survey`/`review`/`bibliography` relies on retrieved references, apply `references/CITATION_VERIFICATION.md`; never present a memory-sourced reference as verified.
 
 > **Windows**：脚本已内置 `sys.stdout.reconfigure(encoding='utf-8')` 保护，无需设 `PYTHONIOENCODING`。
 
@@ -107,6 +115,11 @@ allowed-tools: Read, Glob, Grep, Bash(uv *), Bash(python *), Bash(pandoc *)
 
 ## Reference Map
 
+- `references/TOPIC_EVALUATION.md`: 选题评估——五维框架、致命缺陷审计、学制/能力匹配、范式探测、可行性、三档裁决.
+- `references/SURVEY_GUIDE.md`: 文献调研与综述综合——冻结 RQ、多视角检索、MECE 综合、自对抗、六道门、hedge 阶梯.
+- `references/CITATION_VERIFICATION.md`: 引用真实性核验——能力阶梯、五状态分级、独立核验与收敛规则（survey/review/bibliography 共用）.
+- `references/POLISH_GUIDE.md`: 忠于原意的润色——轻触默认、分节惯例、动词阶梯/phrasebank、中译英；服从 Chinese Writing Boundaries.
+- `references/REVIEW_GUIDE.md`: 送审前统一核查——五维审查、CRITICAL/MAJOR/MINOR、完整性门控、禁词扫描、评分裁决.
 - `references/EXPORT_GUIDE.md`: Pandoc export strategy and troubleshooting.
 - `references/GB_STANDARD.md`: GB/T 7714 and bibliography-related checks.
 - `references/STRUCTURE_GUIDE.md`: thesis structure expectations and chapter mapping.
@@ -117,12 +130,19 @@ allowed-tools: Read, Glob, Grep, Bash(uv *), Bash(python *), Bash(pandoc *)
 - `references/FORBIDDEN_TERMS.md`: 受保护术语；LaTeX 命令示例仅在 `.tex` 项目适用，Markdown 项目以 `[@key]` / `$...$` 为准。
 - `references/TECH_DOC_STYLE_ZH.md`: 中文科技文档排版，适用于学位论文**之外**的文体。
 - `references/modules/EXPERIMENT.md`: experiment-chapter review criteria.
+- `references/modules/TOPIC.md` / `SURVEY.md` / `POLISH.md` / `REVIEW.md`: router-facing summaries for the judgment-driven modules.
+- `references/modules/PRECHECK.md`: 盲审前逐章自查清单（P0/P1/P2），与 `review` 模块协同.
 - `references/UNIVERSITIES/`: school-specific constraints (e.g., `yanshan.md`).
+- `COMPARISON-supervisor-skills.md`: 与 Supervisor-Skills 写作能力的对照、缺口判定与补充落点记录.
 
-每次只读取 Module Router 的 "Read next" 列 + 本节 Chinese Writing Boundaries；不加载其它模块指南。
+每次只读取 Module Router 的 "Read next" 列 + 本节 Chinese Writing Boundaries；不加载其它模块指南。改写类（`polish`/`deai`）额外遵循 Chinese Writing Boundaries 为唯一真源。
 
 ## Example Requests
 
+- "我有两个候选选题，帮我评估哪个值得做博士论文。"（`topic`）
+- "围绕这个方向帮我做一次文献调研，梳理研究现状和空白。"（`survey`）
+- "把这段讨论润色一下，语气别太肯定；引用和公式别动。"（`polish`）
+- "送审前帮我把全文审一遍，按严重程度列问题。"（`review`）
 - "帮我把这个 Markdown 学位论文目录导出为 PDF，检查 Pandoc 配置是否正确。"
 - "请梳理这篇博士论文的章节结构，并检查术语和缩略语是否前后统一。"
 - "按 GB/T 7714 帮我检查参考文献，再看看绪论是不是有明显 AI 腔。"

@@ -126,6 +126,50 @@
         {"type": "contains", "text": "format", "description": "format module routed"},
         {"type": "regex", "pattern": "(标题|层级|标点|heading|punctuation)", "description": "format checks performed"}
       ]
+    },
+    {
+      "id": 13,
+      "prompt": "我有两个候选选题：A 用大模型做地震相分类，B 做弱监督的跨工区速度反演。我每周大概能投入 15 小时，帮我评估哪个更值得做博士论文。",
+      "expected_output": "路由到 topic 模块，按五维框架、致命缺陷审计、能力匹配做结构化评估，给出裁决与最先要做的三件事，不起草正文。",
+      "files": [],
+      "assertions": [
+        {"type": "regex", "pattern": "(topic|选题|开题)", "description": "topic module routed"},
+        {"type": "regex", "pattern": "(更高|更快|更强|更省|更广|五维|致命缺陷)", "description": "five-dimension / fatal-flaw framework applied"},
+        {"type": "regex", "pattern": "(建议开题|修改后开题|建议更换选题)", "description": "verdict issued"}
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "围绕\"深度学习在地震相识别中的应用\"帮我做一次文献调研，梳理目前有哪些方法、跨工区泛化的瓶颈在哪。",
+      "expected_output": "路由到 survey 模块；先确认检索能力，冻结 RQ，多视角检索，逐条核验引用，MECE 综合；无检索能力则如实说明不运行。",
+      "files": [],
+      "assertions": [
+        {"type": "regex", "pattern": "(survey|文献调研|综述)", "description": "survey module routed"},
+        {"type": "regex", "pattern": "(RQ|研究问题|检索|MECE|核验)", "description": "survey procedure referenced"},
+        {"type": "not_contains", "text": "[@fabricated", "description": "no fabricated citations"}
+      ]
+    },
+    {
+      "id": 15,
+      "prompt": "把这段讨论润色一下，读起来更顺一些。注意\"结果提示该方法可能有助于……\"不要改成\"证明\"，引用和公式都别动：样本被归一化至总蛋白量，$E=\\frac{1}{n}\\sum e_i$ 定义误差 [@smith2020]。",
+      "expected_output": "路由到 polish 模块；服从 Chinese Writing Boundaries；保留 hedging、被动语态、[@smith2020] 与 $...$ 公式；输出检查结果/改写稿/改动说明三块。",
+      "files": [],
+      "assertions": [
+        {"type": "regex", "pattern": "(polish|润色)", "description": "polish module routed"},
+        {"type": "regex", "pattern": "(改写稿|改动说明|检查结果)", "description": "three-block delivery present"},
+        {"type": "not_contains", "text": "结果证明", "description": "hedging not upgraded"}
+      ]
+    },
+    {
+      "id": 16,
+      "prompt": "下周就要送盲审了，帮我把整篇论文审一遍，按严重程度列出必须改的问题，给个能不能送审的结论。",
+      "expected_output": "路由到 review 模块；按 CRITICAL/MAJOR/MINOR 分级，编排已有脚本 + LLM 判断，给评分与送审建议；有未解决 CRITICAL 则不允许\"可送审\"。",
+      "files": [],
+      "assertions": [
+        {"type": "regex", "pattern": "(review|送审|盲审)", "description": "review module routed"},
+        {"type": "regex", "pattern": "(CRITICAL|MAJOR|MINOR|P0|P1)", "description": "severity taxonomy applied"},
+        {"type": "regex", "pattern": "(可送审|再打磨|重大修改|送审建议)", "description": "submission verdict issued"}
+      ]
     }
   ]
 }

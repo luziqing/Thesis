@@ -44,3 +44,5 @@ Purpose: Check logical coherence, introduction funnel, heading lead-ins, literat
 | Sequence | 首先、随后 | first, subsequently |
 
 > Full details: see [`../LOGIC_COHERENCE.md`](../LOGIC_COHERENCE.md)
+
+> 内容层规则（主张-证据、绪论漏斗）：见 [`../CONTENT_RULES.md`](../CONTENT_RULES.md) §1–2。

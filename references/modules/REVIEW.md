@@ -30,3 +30,5 @@ CRITICAL/P0 阻断送审 · MAJOR/P1 首轮必被指出 · MINOR/P2 润色级。
 评分一致：9/10 要求 0 CRITICAL 且 ≤2 MAJOR。
 
 > Full details: see [`../REVIEW_GUIDE.md`](../REVIEW_GUIDE.md), [`../CITATION_VERIFICATION.md`](../CITATION_VERIFICATION.md), [`PRECHECK.md`](PRECHECK.md)
+
+> 内容层规则（五维表第 1/2/5 维的证据映射与图表承载）：见 [`../CONTENT_RULES.md`](../CONTENT_RULES.md)。

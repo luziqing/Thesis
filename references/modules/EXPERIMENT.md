@@ -78,3 +78,5 @@
 - 缺少局限 → Major/P1
 - 缺少启示 → Minor/P2
 - 缺少发现总结 → Minor/P2
+
+> 内容层规则（组件关系、消融对应、图表规划）：见 [`../CONTENT_RULES.md`](../CONTENT_RULES.md) §3–5。本文件 LaTeX 示例仅适用于 `.tex` 项目；Markdown 论文以 `[@key]` / `$...$` 为准。

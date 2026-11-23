@@ -1,4 +1,4 @@
 interface:
   display_name: "Thesis ZH (Markdown)"
-  short_description: "Chinese Markdown doctoral thesis: topic evaluation, literature survey, structure, consistency, bibliography, citation verification, logic, faithful polishing, de-AI, pre-submission review, Pandoc export"
+  short_description: "Chinese Markdown doctoral thesis: topic evaluation, literature survey, structure, consistency, bibliography, citation verification, logic, faithful polishing, de-AI, claim-evidence & figure planning, pre-submission review, Pandoc export"
   default_prompt: "Review my Chinese Markdown thesis, choose the right module, run the relevant script where applicable, and return thesis-focused findings."

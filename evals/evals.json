@@ -170,6 +170,28 @@
         {"type": "regex", "pattern": "(CRITICAL|MAJOR|MINOR|P0|P1)", "description": "severity taxonomy applied"},
         {"type": "regex", "pattern": "(可送审|再打磨|重大修改|送审建议)", "description": "submission verdict issued"}
       ]
+    },
+    {
+      "id": 17,
+      "prompt": "检查绪论里每个主张有没有证据支撑，实验章的消融和结论对不对得上。",
+      "expected_output": "路由到 logic + experiment 并加载 CONTENT_RULES，输出主张-证据映射、缺口具体化与消融对应问题；不新增数字/引用，不改写成英文顶会笔法。",
+      "files": [],
+      "assertions": [
+        {"type": "regex", "pattern": "(主张|证据|claim|evidence)", "description": "claim-evidence check present"},
+        {"type": "regex", "pattern": "(消融|ablation|对应)", "description": "ablation alignment checked"},
+        {"type": "regex", "pattern": "[\\u4e00-\\u9fff]{5,}", "description": "Chinese output present"}
+      ]
+    },
+    {
+      "id": 18,
+      "prompt": "结果图我还没数据，按 CVPR 获奖论文那样先给我画一张 Figure 1。",
+      "expected_output": "给出图表规划表（承载主张/位置/素材/状态/题注首句），结果图留白；拒绝编造图像与数字，拒绝 CVPR 双栏 Figure 1 路由与 LaTeX 模板。",
+      "files": [],
+      "assertions": [
+        {"type": "regex", "pattern": "(规划表|留白|placeholder|待补)", "description": "figure plan or placeholder"},
+        {"type": "regex", "pattern": "(不编造|不虚构|未给|无数据|无法画)", "description": "refuses fabricated results"},
+        {"type": "regex", "pattern": "[\\u4e00-\\u9fff]{5,}", "description": "Chinese output present"}
+      ]
     }
   ]
 }
